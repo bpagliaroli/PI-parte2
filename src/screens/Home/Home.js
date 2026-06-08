@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
+import Post from '../../components/Post/Post';
 import { db } from '../../firebase/config';
 
-function Home() {
+function Home(props) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ function Home() {
       <FlatList
         data={posts}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <Text>{item.data.descripcionPost}</Text>}
+        renderItem={({ item }) => <Post id={item.id} data={item.data} navigation={props.navigation} />}
       />
     </View>
   );

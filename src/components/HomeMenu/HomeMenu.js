@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Home from '../../screens/Home/Home';
+import HomeStack from '../HomeStack/HomeStack';
 import Profile from '../../screens/Profile/Profile';
 import NuevoPost from '../../screens/NuevoPost/NuevoPost';
 
@@ -13,7 +13,7 @@ function HomeMenu() {
     <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeStack}
         options={
           {
             headerShown: false,

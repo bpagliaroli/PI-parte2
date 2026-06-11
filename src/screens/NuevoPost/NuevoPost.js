@@ -22,7 +22,7 @@ function NuevoPost() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Crear nuevo paisaje</Text>
+      <Text style={styles.title}>Crea un nuevo post!</Text>
 
       <TextInput
         style={styles.input}

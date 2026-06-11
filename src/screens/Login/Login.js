@@ -30,20 +30,19 @@ function Login(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Paisajes</Text>
       <Text style={styles.subtitle}>Login</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.field}
+          style={styles.campo}
           placeholder="Email"
           value={email}
           onChangeText={text => setEmail(text)}
         />
 
         <TextInput
-          style={styles.field}
-          placeholder="Password"
+          style={styles.campo}
+          placeholder="Contraseña"
           value={password}
           onChangeText={text => setPassword(text)}
           keyboardType="number-pad"
@@ -53,12 +52,12 @@ function Login(props) {
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <Pressable style={styles.button} onPress={() => onSubmit()}>
-          <Text style={styles.buttonText}>Login</Text>
+          <Text style={styles.buttonText}>Iniciar sesión</Text>
         </Pressable>
       </View>
 
       <Pressable style={styles.button} onPress={() => props.navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Ir al registro</Text>
+        <Text style={styles.buttonText}>No tengo cuenta</Text>
       </Pressable>
     </View>
   );
@@ -69,45 +68,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 16,
     backgroundColor: '#f7ead2',
     padding: 20,
-  },
-  title: {
-    fontFamily: 'serif',
-    fontSize: 38,
-    fontWeight: '700',
-    color: '#3f5f3b',
   },
   subtitle: {
     fontFamily: 'serif',
     fontSize: 22,
-    color: '#6f4f37',
+    color: 'brown',
   },
   inputContainer: {
     width: '80%',
-    gap: 10,
+    marginTop: 10,
   },
-  field: {
+  campo: {
+    marginTop:10,
     borderWidth: 1,
     borderColor: '#d8c3a5',
     padding: 8,
-    borderRadius: 4,
     backgroundColor: '#fffaf0',
     color: '#3b3028',
   },
   button: {
+    marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: '#6f8f5f',
-    borderRadius: 6,
   },
   buttonText: {
     color: '#fff',
     fontWeight: '600',
-  },
-  error: {
-    color: '#9c3b2f',
   },
 });
 

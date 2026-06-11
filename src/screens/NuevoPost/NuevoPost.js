@@ -10,6 +10,7 @@ function NuevoPost() {
       descripcionPost: descripcionPost,
       email: auth.currentUser.email,
       createdAt: Date.now(),
+      likes: [], // El posteo empieza con un array vacio porque todavia ningun usuario dio like.
     })
       .then(() => {
         setDescripcionPost('');
@@ -21,7 +22,7 @@ function NuevoPost() {
 
   return (
     <View style={styles.container}>
-      <Text>Nuevo post</Text>
+      <Text style={styles.title}>Crear nuevo paisaje</Text>
 
       <TextInput
         style={styles.input}
@@ -39,28 +40,39 @@ function NuevoPost() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingHorizontal: 10,
-    marginTop: 20,
+    paddingTop: 30,
+    backgroundColor: '#f7ead2',
+  },
+  title: {
+    fontFamily: 'serif',
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#3f5f3b',
+    marginBottom: 10,
   },
   input: {
-    height: 20,
-    paddingVertical: 15,
+    height: 120,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#d8c3a5',
     borderStyle: 'solid',
     borderRadius: 6,
     marginVertical: 10,
+    backgroundColor: '#fffaf0',
+    color: '#3b3028',
   },
   button: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#6f8f5f',
     paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingVertical: 10,
     alignItems: 'center',
     borderRadius: 4,
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: '#28a745',
+    borderColor: '#6f8f5f',
   },
   buttonText: {
     color: '#fff',

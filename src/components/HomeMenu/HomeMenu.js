@@ -10,14 +10,20 @@ const Tab = createBottomTabNavigator();
 
 function HomeMenu() {
   return (
-    <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+    <Tab.Navigator screenOptions={{
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        backgroundColor: '#f7ead2',
+        borderTopColor: '#d8c3a5',
+      },
+    }}>
       <Tab.Screen
         name="Home"
         component={HomeStack}
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <FontAwesome5 name="home" size={24} color="black" />,
+            tabBarIcon: () => <FontAwesome5 name="home" size={24} color="#3f5f3b" />,
           }
         }
       />
@@ -28,7 +34,7 @@ function HomeMenu() {
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <MaterialIcons name="local-post-office" size={24} color="black" />,
+            tabBarIcon: () => <MaterialIcons name="local-post-office" size={24} color="#3f5f3b" />,
           }
         }
       />
@@ -39,7 +45,7 @@ function HomeMenu() {
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} color="black" />,
+            tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} color="#3f5f3b" />,
           }
         }
       />

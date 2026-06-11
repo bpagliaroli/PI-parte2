@@ -10,29 +10,27 @@ function Register(props) {
   const [error, setError] = useState('');
 
   function onSubmit() {
-    !email.includes('@')
-      ? setError('Email mal formateado')
-      : password.length < 6
-        ? setError('La password debe tener una longitud mínima de 6 caracteres')
-        : auth.createUserWithEmailAndPassword(email, password)
-          .then(response => {
-            db.collection('users').add({
-              email: email,
-              userName: userName,
-              createdAt: Date.now(),
-            })
-              .then(() => {
-                props.navigation.navigate('Login');
-              });
-          })
-          .catch(error => {
-            setError('Fallo en el registro');
+    setError('');
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        db.collection('users').add({
+          email: email,
+          userName: userName,
+          createdAt: Date.now(),
+        })
+          .then(() => {
+            props.navigation.navigate('Login');
           });
+      })
+      .catch(error => {
+        setError(error.code);
+      });
   }
 
   return (
     <View style={styles.container}>
-      <Text>Registro</Text>
+      <Text style={styles.title}>Paisajes</Text>
+      <Text style={styles.subtitle}>Registro</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -58,7 +56,7 @@ function Register(props) {
           secureTextEntry={true}
         />
 
-        {error ? <Text>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <Pressable style={styles.button} onPress={() => onSubmit()}>
           <Text style={styles.buttonText}>Registrarme</Text>
@@ -78,6 +76,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 16,
+    backgroundColor: '#f7ead2',
+    padding: 20,
+  },
+  title: {
+    fontFamily: 'serif',
+    fontSize: 38,
+    fontWeight: '700',
+    color: '#3f5f3b',
+  },
+  subtitle: {
+    fontFamily: 'serif',
+    fontSize: 22,
+    color: '#6f4f37',
   },
   inputContainer: {
     width: '80%',
@@ -85,19 +96,24 @@ const styles = StyleSheet.create({
   },
   field: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#d8c3a5',
     padding: 8,
     borderRadius: 4,
+    backgroundColor: '#fffaf0',
+    color: '#3b3028',
   },
   button: {
     paddingVertical: 10,
     paddingHorizontal: 16,
-    backgroundColor: '#1f7a8c',
+    backgroundColor: '#6f8f5f',
     borderRadius: 6,
   },
   buttonText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  error: {
+    color: '#9c3b2f',
   },
 });
 

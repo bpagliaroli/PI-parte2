@@ -4,7 +4,6 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import Post from '../../components/Post/Post';
 import { auth, db } from '../../firebase/config';
-import { BottomTabBarHeightCallbackContext } from '@react-navigation/bottom-tabs';
 
 function Comentarios(props) {
   // Objetivo: mostrar un posteo puntual, listar sus comentarios y agregar nuevos.

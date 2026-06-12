@@ -95,10 +95,12 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '700',
     fontFamily: 'serif',
+    color: '#3f5f3b',
   },
   profileBox: {
     padding: 12,
     borderWidth: 1,
+    borderColor: '#d8c3a5',
     backgroundColor: '#fffaf0',
   },
   userName: {
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     fontWeight: '700',
+    color: '#3f5f3b',
   },
   button: {
     width: '100%',
@@ -127,6 +130,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#fff',
   },
 });
 

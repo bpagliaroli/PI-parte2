@@ -1,42 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import Post from '../../components/Post/Post';
 import { auth, db } from '../../firebase/config';
+import { BottomTabBarHeightCallbackContext } from '@react-navigation/bottom-tabs';
 
 function Comentarios(props) {
   // Objetivo: mostrar un posteo puntual, listar sus comentarios y agregar nuevos.
   // route.params contiene los datos enviados desde navigation.navigate en Post.js.
   const postId = props.route.params.postId;
 
+  const [post, setPost] = useState(null);
   const [comentario, setComentario] = useState('');
   const [comentarios, setComentarios] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // where filtra la coleccion comments para traer solo los comentarios de este posteo.
-    //La idea era tener solamente la coleccion de 'posts' y tenern un array con comentarios al igual que los likes.
-    //Voy a tenern que traerme de firebase los datos de post e intentar renderizar los posts tal y como lo tenemos en el componente.
-    db.collection('comments').where('postId', '==', postId).onSnapshot(docs => {
-      let comentarios = [];
-
-      docs.forEach(doc => {
-        comentarios.push({
-          id: doc.id,
-          data: doc.data(),
-        });
+    // Busco el documento del posteo y leo su array de comentarios.
+    db.collection('posts').doc(postId).onSnapshot(doc => {
+      const data = doc.data();
+      const comentarios = data.comments ? data.comments : [];
+      setPost({
+        id: doc.id,
+        data: data,
       });
-
       setComentarios(comentarios);
       setLoading(false);
     });
   }, []);
 
   function comentarPosteo() {
-    // add crea un documento nuevo en la coleccion comments.
-    db.collection('comments').add({
-      postId: postId,
-      comentario: comentario,
-      email: auth.currentUser.email,
-      createdAt: Date.now(),
+    // Modifico el documento del posteo y agrego el comentario al array comments.
+    db.collection('posts').doc(postId).update({
+      comments: firebase.firestore.FieldValue.arrayUnion({
+        comentario: comentario,
+        email: auth.currentUser.email,
+        createdAt: Date.now(),
+      }),
     })
       .then(() => {
         setComentario('');
@@ -54,21 +55,25 @@ function Comentarios(props) {
       {
         loading
           ? <ActivityIndicator size="large" color="#6f8f5f" />
-          : <FlatList
-            data={comentarios}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) =>
-              <View style={styles.comment}>
-                <Text style={styles.email}>{item.data.email}</Text>
-                <Text style={styles.commentText}>{item.data.comentario}</Text>
-              </View>
-            }
-          />
+          : <View>
+            <Post id={post.id} data={post.data} navigation={props.navigation} />
+
+            <FlatList
+              data={comentarios}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) =>
+                <View style={styles.comment}>
+                  <Text style={styles.email}>{item.email}</Text>
+                  <Text style={styles.commentText}>{item.comentario}</Text>
+                </View>
+              }
+            />
+          </View>
       }
 
       <TextInput
         style={styles.input}
-        placeholder="Comenta aqui tu post"
+        placeholder="Comenta acá el post"
         value={comentario}
         onChangeText={text => setComentario(text)}
       />
@@ -78,7 +83,7 @@ function Comentarios(props) {
       </Pressable>
 
       <Pressable style={styles.button} onPress={() => props.navigation.navigate('Home')}>
-        <Text >Volver</Text>
+        <Text style={styles.buttonText}>Volver</Text>
       </Pressable>
     </View>
   );
@@ -88,30 +93,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-
+    backgroundColor: '#f7ead2',
   },
   title: {
     fontFamily: 'serif',
     fontSize: 30,
     fontWeight: '700',
+    color: '#3f5f3b',
     marginBottom: 10,
   },
   post: {
     padding: 12,
     marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#d8c3a5',
     backgroundColor: '#fffaf0',
   },
   comment: {
     padding: 10,
+    marginVertical: 6,
+    borderWidth: 1,
+    borderColor: '#d8c3a5',
     backgroundColor: '#fffaf0',
   },
   email: {
+    color: '#6f4f37',
     fontSize: 12,
     marginBottom: 6,
   },
   description: {
     fontFamily: 'serif',
     fontSize: 17,
+    color: '#3b3028',
+  },
+  commentText: {
+    color: '#3b3028',
   },
 
   likeText: {
@@ -123,6 +139,7 @@ const styles = StyleSheet.create({
     height: 20,
     paddingVertical: 15,
     paddingHorizontal: 10,
+    borderWidth: 1,
     borderColor: '#d8c3a5',
     borderStyle: 'solid',
     marginVertical: 10,
@@ -133,7 +150,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     alignItems: 'center',
+    borderRadius: 4,
     marginTop: 10,
+  },
+  buttonText: {
+    color: 'black',
   },
 
 });

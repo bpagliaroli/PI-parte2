@@ -11,6 +11,7 @@ function NuevoPost() {
       email: auth.currentUser.email,
       createdAt: Date.now(),
       likes: [], // El posteo empieza con un array vacio porque todavia ningun usuario dio like.
+      comments: [], // El posteo empieza con un array vacio porque todavia no tiene comentarios.
     })
       .then(() => {
         setDescripcionPost('');
@@ -32,7 +33,7 @@ function NuevoPost() {
       />
 
       <Pressable style={styles.button} onPress={() => onSubmit()}>
-        <Text >Crear post</Text>
+        <Text style={styles.buttonText}>Crear post</Text>
       </Pressable>
     </View>
   );
@@ -49,12 +50,16 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
     fontSize: 30,
     fontWeight: '700',
+    color: '#3f5f3b',
     marginBottom: 10,
   },
   input: {
     height: 120,
     paddingVertical: 10,
     paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#d8c3a5',
+    borderStyle: 'solid',
     marginVertical: 10,
     backgroundColor: '#fffaf0',
     color: '#3b3028',
@@ -63,6 +68,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     alignItems: 'center',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#6f8f5f',
+  },
+  buttonText: {
+    color: 'black',
   },
 });
 

@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
     fontSize: 30,
     fontWeight: '700',
+    color: '#3f5f3b',
     marginBottom: 10,
   },
 });

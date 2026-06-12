@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { auth, db } from '../../firebase/config';
 
 function Profile(props) {
@@ -12,6 +12,12 @@ function Profile(props) {
   // Este estado guarda los posteos creados por el usuario logueado.
   const [posts, setPosts] = useState([]);
 
+  // Este estado indica si Firebase todavia esta trayendo los datos del usuario.
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  // Este estado indica si Firebase todavia esta trayendo los posteos del usuario.
+  const [loadingPosts, setLoadingPosts] = useState(true);
+
   useEffect(() => {
     // Busco en la coleccion users el documento que tenga el mismo email que el usuario logueado.
     db.collection('users').where('email', '==', email).onSnapshot(docs => {
@@ -20,6 +26,9 @@ function Profile(props) {
         // Guardo en el estado el userName que viene de Firebase.
         setUserName(doc.data().userName);
       });
+
+      // Cuando Firebase responde, dejo de mostrar el loader de usuario.
+      setLoadingUser(false);
     });
 
     // Busco en la coleccion posts todos los posteos creados por el usuario logueado.
@@ -38,6 +47,9 @@ function Profile(props) {
 
       // Actualizo el estado para que se muestren los posteos en pantalla.
       setPosts(posts);
+
+      // Cuando Firebase responde, dejo de mostrar el loader de posteos.
+      setLoadingPosts(false);
     });
   }, []);
 
@@ -58,23 +70,31 @@ function Profile(props) {
     <View style={styles.container}>
       <Text style={styles.title}>Mi Perfil</Text>
 
-      <View style={styles.profileBox}>
-        <Text style={styles.userName}>{userName}</Text>
-        <Text style={styles.email}>{email}</Text>
-      </View>
+      {
+        loadingUser
+          ? <ActivityIndicator size="large" color="#6f8f5f" />
+          : <View style={styles.profileBox}>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.email}>{email}</Text>
+          </View>
+      }
 
       <Text style={styles.subtitle}>Mis posteos</Text>
 
-      <FlatList
-        data={posts}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) =>
-          <View style={styles.post}>
-            <Text style={styles.description}>{item.data.descripcionPost}</Text>
-            <Text style={styles.likeText}>♥ {item.data.likes ? item.data.likes.length : 0}</Text>
-          </View>
-        }
-      />
+      {
+        loadingPosts
+          ? <ActivityIndicator size="large" color="#6f8f5f" />
+          : <FlatList
+            data={posts}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) =>
+              <View style={styles.post}>
+                <Text style={styles.description}>{item.data.descripcionPost}</Text>
+                <Text style={styles.likeText}>me gusta ♥ {item.data.likes ? item.data.likes.length : 0}</Text>
+              </View>
+            }
+          />
+      }
 
       <Pressable style={styles.button} onPress={() => logout()}>
         <Text style={styles.buttonText}>Cerrar sesion</Text>
@@ -133,7 +153,7 @@ const styles = StyleSheet.create({
     color: '#3b3028',
   },
   likeText: {
-    color: '#b94b42',
+    color: 'red',
     fontWeight: '700',
     marginTop: 8,
   },
@@ -141,7 +161,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 14,
     paddingHorizontal: 16,
-    backgroundColor: '#b96f50',
+    backgroundColor: '#d77e7e',
     borderRadius: 6,
     alignItems: 'center',
     marginTop: 20,

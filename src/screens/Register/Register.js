@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 import { auth, db } from '../../firebase/config';
 
@@ -8,23 +8,36 @@ function Register(props) {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function onSubmit() {
     setError('');
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        db.collection('users').add({
-          email: email,
-          userName: userName,
-          createdAt: Date.now(),
+
+    if (email === '' || userName === '' || password === '') {
+      setError('Completar todos los campos');
+    } else if (!email.includes('@')) {
+      setError('Asegurarse de incluir "@"');
+    } else if (password.length < 6) {
+      setError('La contraseña debe tener una longitud minima de 6 caracteres');
+    } else {
+      setLoading(true);
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(response => {
+          db.collection('users').add({
+            email: email,
+            userName: userName,
+            createdAt: Date.now(),
+          })
+            .then(() => {
+              setLoading(false);
+              props.navigation.navigate('Login');
+            });
         })
-          .then(() => {
-            props.navigation.navigate('Login');
-          });
-      })
-      .catch(error => {
-        setError(error.code);
-      });
+        .catch(error => {
+          setLoading(false);
+          setError(error.code);
+        });
+    }
   }
 
   return (
@@ -57,9 +70,13 @@ function Register(props) {
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <Pressable style={styles.button} onPress={() => onSubmit()}>
-          <Text style={styles.buttonText}>Registrarme</Text>
-        </Pressable>
+        {
+          loading
+            ? <ActivityIndicator size="large" color="#6f8f5f" />
+            : <Pressable style={styles.button} onPress={() => onSubmit()}>
+              <Text style={styles.buttonText}>Registrarme</Text>
+            </Pressable>
+        }
       </View>
 
       <Pressable style={styles.button} onPress={() => props.navigation.navigate('Login')}>

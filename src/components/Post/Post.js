@@ -42,7 +42,7 @@ function Post(props) {
         style={styles.like}
         onPress={() => likePost()}
       >
-        <Text style={styles.likeText}>♥ {likes.length}</Text>
+        <Text style={styles.likeText}>me gusta ♥ {likes.length}</Text>
       </Pressable>
 
       <Pressable
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   likeText: {
-    color: '#b94b42',
+    color: 'red',
     fontWeight: '700',
   },
   button: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { auth, db } from '../../firebase/config';
 
 function Comentarios(props) {
@@ -12,6 +12,9 @@ function Comentarios(props) {
 
   // Este estado guarda todos los comentarios que Firebase trae para este posteo.
   const [comentarios, setComentarios] = useState([]);
+
+  // Este estado indica si Firebase todavia esta trayendo los comentarios.
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Entro a la coleccion comments para buscar los comentarios guardados.
@@ -31,6 +34,9 @@ function Comentarios(props) {
 
       // Actualizo el estado para que la pantalla muestre los comentarios.
       setComentarios(comentarios);
+
+      // Cuando Firebase responde, dejo de mostrar el loader.
+      setLoading(false);
     });
   }, []);
 
@@ -59,19 +65,23 @@ function Comentarios(props) {
       <View style={styles.post}>
         <Text style={styles.email}>{props.route.params.email}</Text>
         <Text style={styles.description}>{props.route.params.descripcionPost}</Text>
-        <Text style={styles.likeText}>♥ {props.route.params.likes}</Text>
+        <Text style={styles.likeText}>me gusta ♥ {props.route.params.likes}</Text>
       </View>
 
-      <FlatList
-        data={comentarios}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) =>
-          <View style={styles.comment}>
-            <Text style={styles.email}>{item.data.email}</Text>
-            <Text style={styles.commentText}>{item.data.comentario}</Text>
-          </View>
-        }
-      />
+      {
+        loading
+          ? <ActivityIndicator size="large" color="#6f8f5f" />
+          : <FlatList
+            data={comentarios}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) =>
+              <View style={styles.comment}>
+                <Text style={styles.email}>{item.data.email}</Text>
+                <Text style={styles.commentText}>{item.data.comentario}</Text>
+              </View>
+            }
+          />
+      }
 
       <TextInput
         style={styles.input}
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
     color: '#3b3028',
   },
   likeText: {
-    color: '#b94b42',
+    color: 'red',
     fontWeight: '700',
     marginTop: 8,
   },

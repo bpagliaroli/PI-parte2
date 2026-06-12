@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState, useEffect } from 'react';
 import { auth } from '../../firebase/config';
 
@@ -7,6 +7,7 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged(user => {
@@ -18,14 +19,24 @@ function Login(props) {
 
   function onSubmit() {
     setError('');
-    auth.signInWithEmailAndPassword(email, password)
-      .then(response => {
-        console.log(response.user);
-        props.navigation.navigate('HomeMenu');
-      })
-      .catch(error => {
-        setError(error.code);
-      });
+
+    if (email === '' || password === '') {
+      setError('Completar todos los campos');
+    } else if (!email.includes('@')) {
+      setError('Asegurarse de escribir "@"');
+    } else {
+      setLoading(true);
+      auth.signInWithEmailAndPassword(email, password)
+        .then(response => {
+          console.log(response.user);
+          setLoading(false);
+          props.navigation.navigate('HomeMenu');
+        })
+        .catch(error => {
+          setLoading(false);
+          setError(error.code);
+        });
+    }
   }
 
   return (
@@ -51,9 +62,13 @@ function Login(props) {
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <Pressable style={styles.button} onPress={() => onSubmit()}>
-          <Text style={styles.buttonText}>Iniciar sesión</Text>
-        </Pressable>
+        {
+          loading
+            ? <ActivityIndicator size="large" color="#6f8f5f" />
+            : <Pressable style={styles.button} onPress={() => onSubmit()}>
+              <Text style={styles.buttonText}>Iniciar sesión</Text>
+            </Pressable>
+        }
       </View>
 
       <Pressable style={styles.button} onPress={() => props.navigation.navigate('Register')}>

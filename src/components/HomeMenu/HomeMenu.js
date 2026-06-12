@@ -23,7 +23,7 @@ function HomeMenu() {
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <FontAwesome5 name="home" size={24} color="#3f5f3b" />,
+            tabBarIcon: () => <FontAwesome5 name="home" size={24}  />,
           }
         }
       />
@@ -34,7 +34,7 @@ function HomeMenu() {
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <MaterialIcons name="local-post-office" size={24} color="#3f5f3b" />,
+            tabBarIcon: () => <MaterialIcons name="local-post-office" size={24} />,
           }
         }
       />
@@ -45,7 +45,7 @@ function HomeMenu() {
         options={
           {
             headerShown: false,
-            tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} color="#3f5f3b" />,
+            tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} />,
           }
         }
       />

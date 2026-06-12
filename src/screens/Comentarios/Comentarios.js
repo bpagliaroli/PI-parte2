@@ -13,6 +13,8 @@ function Comentarios(props) {
 
   useEffect(() => {
     // where filtra la coleccion comments para traer solo los comentarios de este posteo.
+    //La idea era tener solamente la coleccion de 'posts' y tenern un array con comentarios al igual que los likes.
+    //Voy a tenern que traerme de firebase los datos de post e intentar renderizar los posts tal y como lo tenemos en el componente.
     db.collection('comments').where('postId', '==', postId).onSnapshot(docs => {
       let comentarios = [];
 
@@ -48,11 +50,6 @@ function Comentarios(props) {
     <View style={styles.container}>
       <Text style={styles.title}>Comentarios</Text>
 
-      <View style={styles.post}>
-        <Text style={styles.email}>{props.route.params.email}</Text>
-        <Text style={styles.description}>{props.route.params.descripcionPost}</Text>
-        <Text style={styles.likeText}>me gusta ♥ {props.route.params.likes}</Text>
-      </View>
 
       {
         loading
@@ -81,7 +78,7 @@ function Comentarios(props) {
       </Pressable>
 
       <Pressable style={styles.button} onPress={() => props.navigation.navigate('Home')}>
-        <Text style={styles.buttonText}>Volver</Text>
+        <Text >Volver</Text>
       </Pressable>
     </View>
   );
@@ -117,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
 
-
   likeText: {
     color: 'red',
     fontWeight: '700',
@@ -139,9 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  buttonText: {
-    color: '#fff',
-  },
+
 });
 
 export default Comentarios;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import Post from '../../components/Post/Post';
 import { auth, db } from '../../firebase/config';
 
 function Profile(props) {
-  // Objetivo: mostrar datos del usuario logueado, sus posteos y permitir cerrar sesion.
+  // Tengo que mostrar datos del usuario logueado, sus posteos y permitir cerrar sesion.
   const email = auth.currentUser.email;
 
   const [userName, setUserName] = useState('');
@@ -67,13 +68,11 @@ function Profile(props) {
         loadingPosts
           ? <ActivityIndicator size="large" color="#6f8f5f" />
           : <FlatList
+          //Se que aparece el boton de comentar, pero no pasa nada!!!
             data={posts}
             keyExtractor={item => item.id}
             renderItem={({ item }) =>
-              <View style={styles.post}>
-                <Text style={styles.description}>{item.data.descripcionPost}</Text>
-                <Text style={styles.likeText}>me gusta ♥ {item.data.likes ? item.data.likes.length : 0}</Text>
-              </View>
+              <Post id={item.id} data={item.data} navigation={props.navigation} />
             }
           />
       }
@@ -117,21 +116,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
   },
-  post: {
-    padding: 12,
-    marginVertical: 10,
-    backgroundColor: '#fffaf0',
-  },
-  description: {
-    fontFamily: 'serif',
-    fontSize: 17,
-    color: '#3b3028',
-  },
-  likeText: {
-    color: 'red',
-    fontWeight: '700',
-    marginTop: 8,
-  },
   button: {
     width: '100%',
     paddingVertical: 14,
@@ -143,7 +127,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#fff',
   },
 });
 

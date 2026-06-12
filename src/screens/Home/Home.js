@@ -7,7 +7,7 @@ function Home(props) {
   // Objetivo: guardar y mostrar todos los posteos de la coleccion posts
   const [posts, setPosts] = useState([]);
 
-  // loading sirve para mostrar un ActivityIndicator mientras Firebase carga los datos
+  // loading me sirve para mostrar un ActivityIndicator mientras Firebase carga los datitos
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,8 @@ function Home(props) {
         loading
           ? <ActivityIndicator size="large" color="#6f8f5f" />
           : <FlatList
-            data={posts}
+          //Los posteos deberian renderizarse de forma descendente!!!! 
+          data={posts}
             keyExtractor={item => item.id}
             // renderItem crea un componente Post por cada item y le pasa props.
             renderItem={({ item }) => <Post id={item.id} data={item.data} navigation={props.navigation} />}

@@ -32,7 +32,7 @@ function NuevoPost() {
       />
 
       <Pressable style={styles.button} onPress={() => onSubmit()}>
-        <Text style={styles.buttonText}>Crear post</Text>
+        <Text >Crear post</Text>
       </Pressable>
     </View>
   );
@@ -49,15 +49,12 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
     fontSize: 30,
     fontWeight: '700',
-    color: '#3f5f3b',
     marginBottom: 10,
   },
   input: {
     height: 120,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderStyle: 'solid',
     marginVertical: 10,
     backgroundColor: '#fffaf0',
     color: '#3b3028',
@@ -66,11 +63,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     alignItems: 'center',
-    borderWidth: 1,
-    borderStyle: 'solid',
-  },
-  buttonText: {
-    color: '#fff',
   },
 });
 

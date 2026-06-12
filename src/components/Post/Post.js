@@ -17,12 +17,12 @@ function Post(props) {
 
   function likePost() {
     if (liked) {
-      // update modifica el documentoooo. arrayRemove quita el email del array
+      // update modifica el documentoooo. arrayRemove saca el email del array
       db.collection('posts').doc(props.id).update({
         likes: firebase.firestore.FieldValue.arrayRemove(userEmail),
       });
     } else {
-      // arrayUnion agrega el email al array y evita que se repita
+                  //arrayUnion agrega el email al array y evita que se repita
       db.collection('posts').doc(props.id).update({
         likes: firebase.firestore.FieldValue.arrayUnion(userEmail),
       });
@@ -62,20 +62,15 @@ const styles = StyleSheet.create({
   container: {
     padding: 12,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: '#d8c3a5',
-    borderRadius: 6,
     backgroundColor: '#fffaf0',
   },
   email: {
-    color: '#6f4f37',
     fontSize: 12,
     marginBottom: 6,
   },
   description: {
     fontFamily: 'serif',
     fontSize: 17,
-    color: '#3b3028',
   },
   like: {
     marginTop: 10,
@@ -85,16 +80,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   button: {
-    backgroundColor: '#6f8f5f',
+    backgroundColor: 'green',
     paddingHorizontal: 10,
     paddingVertical: 6,
     alignItems: 'center',
     borderRadius: 4,
     marginTop: 10,
   },
-  buttonText: {
-    color: '#fff',
-  },
+
 });
 
 export default Post;

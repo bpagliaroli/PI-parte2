@@ -4,14 +4,19 @@ import Post from '../../components/Post/Post';
 import { db } from '../../firebase/config';
 
 function Home(props) {
+  // Objetivo: guardar y mostrar todos los posteos de la coleccion posts
   const [posts, setPosts] = useState([]);
+
+  // loading sirve para mostrar un ActivityIndicator mientras Firebase carga los datos
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // useEffect se ejecuta cuando carga la pantalla. onSnapshot escucha la coleccion en tiempo real
     db.collection('posts').onSnapshot(docs => {
       let posts = [];
 
       docs.forEach(doc => {
+        // Cada documento de Firebase se transforma en un objeto para poder usarlo en FlatList
         posts.push({
           id: doc.id,
           data: doc.data(),
@@ -33,6 +38,7 @@ function Home(props) {
           : <FlatList
             data={posts}
             keyExtractor={item => item.id}
+            // renderItem crea un componente Post por cada item y le pasa props.
             renderItem={({ item }) => <Post id={item.id} data={item.data} navigation={props.navigation} />}
           />
       }
@@ -50,7 +56,6 @@ const styles = StyleSheet.create({
     fontFamily: 'serif',
     fontSize: 30,
     fontWeight: '700',
-    color: '#3f5f3b',
     marginBottom: 10,
   },
 });

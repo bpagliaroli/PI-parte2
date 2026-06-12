@@ -3,65 +3,47 @@ import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from '
 import { auth, db } from '../../firebase/config';
 
 function Profile(props) {
-  // Guardo el email del usuario logueado porque lo voy a usar para buscar sus datos.
+  // Objetivo: mostrar datos del usuario logueado, sus posteos y permitir cerrar sesion.
   const email = auth.currentUser.email;
 
-  // Este estado guarda el nombre de usuario que viene de la coleccion users.
   const [userName, setUserName] = useState('');
-
-  // Este estado guarda los posteos creados por el usuario logueado.
   const [posts, setPosts] = useState([]);
-
-  // Este estado indica si Firebase todavia esta trayendo los datos del usuario.
   const [loadingUser, setLoadingUser] = useState(true);
-
-  // Este estado indica si Firebase todavia esta trayendo los posteos del usuario.
   const [loadingPosts, setLoadingPosts] = useState(true);
 
   useEffect(() => {
-    // Busco en la coleccion users el documento que tenga el mismo email que el usuario logueado.
+    // Busco en users el documento que tenga el email del usuario logueado.
     db.collection('users').where('email', '==', email).onSnapshot(docs => {
-      // Recorro los documentos encontrados. En este caso deberia ser un solo usuario.
       docs.forEach(doc => {
-        // Guardo en el estado el userName que viene de Firebase.
         setUserName(doc.data().userName);
       });
 
-      // Cuando Firebase responde, dejo de mostrar el loader de usuario.
       setLoadingUser(false);
     });
 
-    // Busco en la coleccion posts todos los posteos creados por el usuario logueado.
+    // Busco en posts los documentos creados por este email.
     db.collection('posts').where('email', '==', email).onSnapshot(docs => {
-      // Creo un array vacio para guardar los posteos que vienen de Firebase.
       let posts = [];
 
-      // Recorro cada documento de la coleccion posts.
       docs.forEach(doc => {
-        // Guardo el id y la data de cada posteo dentro del array.
         posts.push({
           id: doc.id,
           data: doc.data(),
         });
       });
 
-      // Actualizo el estado para que se muestren los posteos en pantalla.
       setPosts(posts);
-
-      // Cuando Firebase responde, dejo de mostrar el loader de posteos.
       setLoadingPosts(false);
     });
   }, []);
 
   function logout() {
-    // signOut cierra la sesion del usuario actual en Firebase.
+    // signOut cierra la sesion en Firebase. Si sale bien, vuelve a Login.
     auth.signOut()
       .then(() => {
-        // Si el cierre de sesion fue correcto, vuelvo a la pantalla de Login.
         props.navigation.navigate('Login');
       })
       .catch(error => {
-        // Si Firebase devuelve un error, lo mostramos en consola para poder verlo.
         console.log(error);
       });
   }
@@ -114,13 +96,10 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '700',
     fontFamily: 'serif',
-    color: '#3f5f3b',
   },
   profileBox: {
     padding: 12,
     borderWidth: 1,
-    borderColor: '#d8c3a5',
-    borderRadius: 6,
     backgroundColor: '#fffaf0',
   },
   userName: {
@@ -137,14 +116,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     fontWeight: '700',
-    color: '#3f5f3b',
   },
   post: {
     padding: 12,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: '#d8c3a5',
-    borderRadius: 6,
     backgroundColor: '#fffaf0',
   },
   description: {
@@ -162,7 +137,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     backgroundColor: '#d77e7e',
-    borderRadius: 6,
     alignItems: 'center',
     marginTop: 20,
   },

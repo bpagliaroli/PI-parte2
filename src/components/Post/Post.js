@@ -5,28 +5,24 @@ import 'firebase/firestore';
 import { auth, db } from '../../firebase/config';
 
 function Post(props) {
-  // Guardo los likes del posteo en una variable para poder usarlos en el componente.
-  // Si el posteo no tiene el campo likes, uso un array vacio para que la app no se rompa.
+  // El objetivo es mostrar un posteo y permitir que el usuario le de like o lo comente
+  // props es el objeto que arma React con los datos enviados desde Home, o sea id, data y navigation
   const likes = props.data.likes ? props.data.likes : [];
 
-  // Guardo el email del usuario logueado porque ese email identifica quien dio like.
+  // El email del usuario logueado identifica quien dio like
   const userEmail = auth.currentUser.email;
 
-  // Con includes pregunto si el array de likes ya tiene el email del usuario logueado.
+  // includes controla si ese usuario ya esta dentro del array de likes
   const liked = likes.includes(userEmail);
 
   function likePost() {
-    // Si liked es true, significa que el usuario ya habia dado like.
     if (liked) {
-      // update modifica el documento del posteo sin crear uno nuevo.
-      // arrayRemove saca el email del usuario del array de likes.
+      // update modifica el documentoooo. arrayRemove quita el email del array
       db.collection('posts').doc(props.id).update({
         likes: firebase.firestore.FieldValue.arrayRemove(userEmail),
       });
     } else {
-      // Si liked es false, significa que el usuario todavia no habia dado like.
-      // arrayUnion agrega el email del usuario al array de likes.
-      // arrayUnion tambien evita que el mismo email se agregue dos veces.
+      // arrayUnion agrega el email al array y evita que se repita
       db.collection('posts').doc(props.id).update({
         likes: firebase.firestore.FieldValue.arrayUnion(userEmail),
       });
@@ -36,6 +32,7 @@ function Post(props) {
   return (
       <View style={styles.container}>
       <Text style={styles.email}>{props.data.email}</Text>
+
       <Text style={styles.description}>{props.data.descripcionPost}</Text>
 
       <Pressable
@@ -48,6 +45,7 @@ function Post(props) {
       <Pressable
         style={styles.button}
         onPress={() => props.navigation.navigate('Comentarios', {
+          // navigate cambia de pantalla y envia params a Comentarios.
           postId: props.id,
           descripcionPost: props.data.descripcionPost,
           email: props.data.email,

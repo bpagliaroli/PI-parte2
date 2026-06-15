@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   profileBox: {
     padding: 12,
     borderWidth: 1,
-    borderColor: '#d8c3a5',
     backgroundColor: '#fffaf0',
   },
   userName: {

@@ -10,8 +10,8 @@ function NuevoPost() {
       descripcionPost: descripcionPost,
       email: auth.currentUser.email,
       createdAt: Date.now(),
-      likes: [], // El posteo empieza con un array vacio porque todavia ningun usuario dio like.
-      comments: [], // El posteo empieza con un array vacio porque todavia no tiene comentarios.
+      likes: [],
+      comments: [],
     })
       .then(() => {
         setDescripcionPost('');

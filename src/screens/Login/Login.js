@@ -34,7 +34,6 @@ function Login(props) {
         })
         .catch(error => {
           setLoading(false);
-          //hacemos una validacion con if... para comparar con el auth invalid error. Y en vez de poner 'error.code' ponemos el string que queramos. 
           setError(error.code);
         });
     }

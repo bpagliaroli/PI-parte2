@@ -11,6 +11,6 @@ const firebaseConfig = {
   appId: "1:750776134842:web:5194134d835f2135c4e683"
 };
 
-app.initializeApp(firebaseConfig); //ejecucion de la configuracion
-export const auth = app.auth(); //exportacion del modulo de autenticacion para usarlo en otros archivos
-export const db = app.firestore(); //exportacion del modulo de base de datos para usarlo en otros archivos
+app.initializeApp(firebaseConfig);
+export const auth = app.auth();
+export const db = app.firestore();

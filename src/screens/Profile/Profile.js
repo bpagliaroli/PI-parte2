@@ -4,7 +4,6 @@ import Post from '../../components/Post/Post';
 import { auth, db } from '../../firebase/config';
 
 function Profile(props) {
-  // Tengo que mostrar datos del usuario logueado, sus posteos y permitir cerrar sesion.
   const email = auth.currentUser.email;
 
   const [userName, setUserName] = useState('');
@@ -13,7 +12,6 @@ function Profile(props) {
   const [loadingPosts, setLoadingPosts] = useState(true);
 
   useEffect(() => {
-    // Busco en users el documento que tenga el email del usuario logueado.
     db.collection('users').where('email', '==', email).onSnapshot(docs => {
       docs.forEach(doc => {
         setUserName(doc.data().userName);
@@ -22,7 +20,6 @@ function Profile(props) {
       setLoadingUser(false);
     });
 
-    // Busco en posts los documentos creados por este email.
     db.collection('posts').where('email', '==', email).onSnapshot(docs => {
       let posts = [];
 
@@ -39,7 +36,6 @@ function Profile(props) {
   }, []);
 
   function logout() {
-    // signOut cierra la sesion en Firebase. Si sale bien, vuelve a Login.
     auth.signOut()
       .then(() => {
         props.navigation.navigate('Login');
@@ -68,7 +64,6 @@ function Profile(props) {
         loadingPosts
           ? <ActivityIndicator size="large" color="#6f8f5f" />
           : <FlatList
-          //Se que aparece el boton de comentar, pero no pasa nada!!!
             data={posts}
             keyExtractor={item => item.id}
             renderItem={({ item }) =>

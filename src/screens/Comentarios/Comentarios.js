@@ -6,8 +6,6 @@ import Post from '../../components/Post/Post';
 import { auth, db } from '../../firebase/config';
 
 function Comentarios(props) {
-  // Objetivo: mostrar un posteo puntual, listar sus comentarios y agregar nuevos.
-  // route.params contiene los datos enviados desde navigation.navigate en Post.js.
   const postId = props.route.params.postId;
 
   const [post, setPost] = useState(null);
@@ -16,7 +14,6 @@ function Comentarios(props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Busco el documento del posteo y leo su array de comentarios.
     db.collection('posts').doc(postId).onSnapshot(doc => {
       const data = doc.data();
       const comentarios = data.comments ? data.comments : [];
@@ -30,7 +27,6 @@ function Comentarios(props) {
   }, []);
 
   function comentarPosteo() {
-    // Modifico el documento del posteo y agrego el comentario al array comments.
     db.collection('posts').doc(postId).update({
       comments: firebase.firestore.FieldValue.arrayUnion({
         comentario: comentario,
